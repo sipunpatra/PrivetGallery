@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="login_button_height">40dp</dimen>
+    <dimen name="login_button_width">300dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
+    <dimen name="unit_height">24dp</dimen>
+    <dimen name="login_image_height">128dp</dimen>
+    <dimen name="version_text">12sp</dimen>
+    <dimen name="otp_text_size">15sp</dimen>
+    <dimen name="image_margin">20dp</dimen>
+    <dimen name="text_size">18dp</dimen>
+    <dimen name="image_size">120dp</dimen>
+    <dimen name="satellite_width">100dp</dimen>
+    <dimen name="splash_margin_bottom">40dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="size_16">16sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="appbar_padding">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+</resources>

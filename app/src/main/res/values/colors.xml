@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="oiipcra_blue">#5373e8</color>
+
+    <color name="transparent_black">#9A000000</color>
+    <color name="transparent_dark_black">#AA030303</color>
+
+    <color name="grey500">#DFD9D9</color>
+    <color name="button_color">#1C81EC</color>
+    <color name="colorPrimary">#9AA41E22</color>
+    <color name="text_color">#3399FF</color>
+    <color name="color1">#B7D5F4</color>
+    <color name="color2">#9999FF</color>
+
+    <color name="orange">#FF9800</color>
+
+    <color name="edit_bg_color">#ABCEEC</color>
+
+    <color name="startColor">#007ADF</color>
+    <color name="endColor">#9DCBFB</color>
+    <color name="card">#F6F6F6</color>
+    <color name="bgColor">#FFDFD9D9</color>
+
+    <color name="colorPrimaryDark">#007ADF</color><!--#0164CD-->
+
+    <color name="colorAccent">#FF0000</color>
+    <color name="accept">#4CAF50</color>
+    <color name="toolbarRed">#A41E22</color>
+    <color name="toolbarRed_accurate">#a41e22</color>
+    <color name="toolbarOrange">#e9a133</color>
+
+
+
+    <color name="note1">#F44336</color>
+    <color name="note2">#3F51B5</color>
+    <color name="note3">#CDDC39</color>
+    <color name="note4">#03A9F4</color>
+    <color name="note5">#4CAF50</color>
+    <color name="note6">#FF9800</color>
+    <color name="note7">#009688</color>
+
+</resources>
