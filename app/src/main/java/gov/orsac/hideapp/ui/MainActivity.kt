@@ -42,9 +42,9 @@ class MainActivity : AppCompatActivity() {
 
         }
         video.setOnClickListener {
-//            val intent = Intent(this, VideoActivity::class.java)
-//            startActivity(intent)
-            Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, VideoActivity::class.java)
+            startActivity(intent)
+//            Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
 
         }
 
