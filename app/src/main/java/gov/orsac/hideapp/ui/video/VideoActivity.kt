@@ -1,266 +1,85 @@
 package gov.orsac.hideapp.ui.video
 
-import android.annotation.SuppressLint
-import android.app.Activity
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import gov.orsac.hideapp.R
-import gov.orsac.hideapp.adapter.ImageAdapter
 import gov.orsac.hideapp.adapter.VideoAdapter
-import gov.orsac.hideapp.ui.note.db.Notes
-import gov.orsac.hideapp.ui.video.model.Video
-import java.io.File
 
 class VideoActivity : AppCompatActivity() {
 
-    private val PERMISSION_REQUEST_CODE = 100
     private val PICK_VIDEO_REQUEST = 1
-
-    private lateinit var videoAdapter: VideoAdapter
-    private var videoUris: MutableList<Uri> = ArrayList()
-    private lateinit var hiddenDir: File
     private val PREFS_NAME = "video_prefs"
     private val VIDEO_URIS_KEY = "video_uris"
 
-
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_video)
-//        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-//        val videoUrisString = prefs.getString(VIDEO_URIS_KEY, "")
-//
-//        val fab = findViewById<FloatingActionButton>(R.id.btn_Add_video)
-//        hiddenDir = File(getExternalFilesDir(Environment.DIRECTORY_MOVIES), ".hidden")
-//
-//        videoAdapter = VideoAdapter(this,videoUris)
-//        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-//        recyclerView.layoutManager = StaggeredGridLayoutManager(4, LinearLayoutManager.VERTICAL)
-//        recyclerView.adapter = videoAdapter
-//
-//        if (videoUrisString != null) {
-//            if (videoUrisString.isNotEmpty()) {
-//                videoUris = videoUrisString.split(",").map { Uri.parse(it) }.toMutableList()
-//                videoAdapter.notifyDataSetChanged()
-//            }
-//        }
-//
-//
-//
-//
-//        if (savedInstanceState != null) {
-//            // Restore saved state
-//            val uris = savedInstanceState.getParcelableArrayList<Uri>("videoUris")
-//            videoUris.addAll(uris ?: emptyList())
-//            videoAdapter.notifyDataSetChanged()
-//        }
-//
-//        fab.setOnClickListener {
-//            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-//                if (checkPermission()) {
-//                    selectMedia()
-//                } else {
-//                    requestPermission()
-//                }
-//            } else {
-//                selectMedia()
-//            }
-//        }
-//    }
-//    private fun checkPermission(): Boolean {
-//        val result = ContextCompat.checkSelfPermission(
-//            this,
-//            android.Manifest.permission.READ_EXTERNAL_STORAGE
-//        )
-//        return result == PackageManager.PERMISSION_GRANTED
-//
-//    }
-//    private fun requestPermission() {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                PERMISSION_REQUEST_CODE
-//            )
-//    }
-//    private fun selectMedia() {
-//        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-//            type = "video/*"
-//            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*"))
-//            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-//        }
-//        startActivityForResult(intent, PICK_VIDEO_REQUEST)
-//    }
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == PERMISSION_REQUEST_CODE) {
-//            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-//                // Permission granted, proceed with media selection
-//                selectMedia()
-//            } else {
-//                // Permission denied, show a message to the user
-//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-//
-////    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-////        super.onActivityResult(requestCode, resultCode, data)
-////        if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK) {
-////            data?.clipData?.let { clipData ->
-////                for (i in 0 until clipData.itemCount) {
-////                    val videoUri = clipData.getItemAt(i).uri
-////                    videoUris.add(videoUri)
-////                }
-////            } ?: run {
-////                data?.data?.let {
-////                    videoUris.add(it)
-////                }
-////            }
-////            videoAdapter.notifyDataSetChanged()
-////        }
-////    }
-//override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//    super.onActivityResult(requestCode, resultCode, data)
-//    if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK) {
-//        data?.clipData?.let { clipData ->
-//            for (i in 0 until clipData.itemCount) {
-//                val videoUri = clipData.getItemAt(i).uri
-//                videoUris.add(videoUri)
-//            }
-//        } ?: run {
-//            data?.data?.let {
-//                videoUris.add(it)
-//            }
-//        }
-//        videoAdapter.notifyDataSetChanged()
-//    }
-//}
-//
-//    @SuppressLint("NotifyDataSetChanged")
-//    private fun handleVideoUri(videoUri: Uri) {
-//        videoUris.addAll(listOf(videoUri))
-//        videoAdapter.notifyDataSetChanged()
-//    }
-//    override fun onDestroy() {
-//        super.onDestroy()
-//
-//        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-//        val editor = prefs.edit()
-//
-//        editor.putString(VIDEO_URIS_KEY, videoUris.joinToString(","))
-//        editor.apply()
-//    }
-
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var videoAdapter: VideoAdapter
+    private val videoUris = mutableListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
 
-        // Initialize hidden directory
-        hiddenDir = File(getExternalFilesDir(Environment.DIRECTORY_MOVIES), ".hidden")
+        recyclerView = findViewById(R.id.recyclerView)
+        val fabAddVideo: FloatingActionButton = findViewById(R.id.btn_Add_video)
 
-        // Initialize RecyclerView
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(4, LinearLayoutManager.VERTICAL)
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
 
-        // Initialize FloatingActionButton
-        val fab = findViewById<FloatingActionButton>(R.id.btn_Add_video)
-
-        // Initialize adapter
-        videoAdapter = VideoAdapter(this, videoUris)
-        recyclerView.adapter = videoAdapter
-
-        // Load saved URIs from SharedPreferences
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val videoUrisString = prefs.getString(VIDEO_URIS_KEY, "")
-        if (!videoUrisString.isNullOrEmpty()) {
-            val savedUris = videoUrisString.split(",").map { Uri.parse(it) }
-            videoUris.addAll(savedUris) // Add saved URIs to the list
-            videoAdapter.notifyDataSetChanged()
+        if (prefs.contains(VIDEO_URIS_KEY) && prefs.all[VIDEO_URIS_KEY] !is Set<*>) {
+            prefs.edit().remove(VIDEO_URIS_KEY).apply()
         }
 
-        // Restore state if available
-        if (savedInstanceState != null) {
-            val uris = savedInstanceState.getParcelableArrayList<Uri>("videoUris")
-            videoUris.addAll(uris ?: emptyList())
-            videoAdapter.notifyDataSetChanged()
-        }
+        loadVideos()
 
-        // FloatingActionButton click listener
-        fab.setOnClickListener {
-            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-                if (checkPermission()) {
-                    selectMedia()
-                } else {
-                    requestPermission()
-                }
-            } else {
-                selectMedia()
+        fabAddVideo.setOnClickListener {
+            if (checkStoragePermission()) {
+                openVideoPicker()
             }
         }
     }
 
-    private fun checkPermission(): Boolean {
-        val result = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-        return result == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-            PERMISSION_REQUEST_CODE
-        )
-    }
-
-    private fun selectMedia() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "video/*"
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*"))
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        }
-        startActivityForResult(intent, PICK_VIDEO_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_VIDEO_REQUEST && resultCode == Activity.RESULT_OK) {
-            // Handle multiple video selection
-            data?.clipData?.let { clipData ->
-                for (i in 0 until clipData.itemCount) {
-                    val videoUri = clipData.getItemAt(i).uri
-                    videoUris.add(videoUri)
-                }
-            } ?: data?.data?.let { videoUri ->
-                // Handle single video selection
-                videoUris.add(videoUri)
+    private fun checkStoragePermission(): Boolean {
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO)
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
+                        1001
+                    )
+                    false
+                } else true
             }
-            videoAdapter.notifyDataSetChanged()
-        }
-    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun handleVideoUri(videoUri: Uri) {
-        videoUris.add(videoUri)
-        videoAdapter.notifyDataSetChanged()
+            else -> {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        1001
+                    )
+                    false
+                } else true
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -269,23 +88,64 @@ class VideoActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                selectMedia()
+        if (requestCode == 1001) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openVideoPicker()
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permission denied to read videos", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // Save video URIs to SharedPreferences
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putString(VIDEO_URIS_KEY, videoUris.joinToString(","))
-        editor.apply()
+    private fun openVideoPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "video/*"
+        }
+        startActivityForResult(intent, PICK_VIDEO_REQUEST)
     }
 
+    private fun loadVideos() {
+        videoUris.addAll(loadSavedVideos())
+        videoAdapter = VideoAdapter(this, videoUris) { uri ->
+            playVideo(uri)
+        }
+        recyclerView.adapter = videoAdapter
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
+            val selectedVideoUri = data.data
+            selectedVideoUri?.let { uri ->
+                contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                videoUris.add(0, uri)
+                saveVideos()
+                videoAdapter.notifyItemInserted(0)
+                recyclerView.scrollToPosition(0)
+            }
+        }
+    }
+
+    private fun loadSavedVideos(): List<Uri> {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val uriStrings = prefs.getStringSet(VIDEO_URIS_KEY, emptySet()) ?: emptySet()
+        return uriStrings.map { Uri.parse(it) }
+    }
+
+    private fun saveVideos() {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
+        val uriStrings = videoUris.map { it.toString() }.toSet()
+        prefs.putStringSet(VIDEO_URIS_KEY, uriStrings)
+        prefs.apply()
+    }
+
+    private fun playVideo(uri: Uri) {
+        val intent = Intent(this, VideoShowActivity::class.java)
+        intent.putExtra("video_uri", uri.toString())
+        startActivity(intent)
+    }
 }

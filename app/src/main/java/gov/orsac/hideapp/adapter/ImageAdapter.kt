@@ -29,7 +29,7 @@ class ImageAdapter(private val context: Context, private val files: Array<File>)
         val imageView: ImageView = if (convertView == null) {
             ImageView(context).apply {
                 val layoutParams = LinearLayout.LayoutParams(300, 300).apply {
-                    setMargins(10, 8, 10, 8)  // set margins (left, top, right, bottom)
+                    setMargins(10, 8, 10, 8)
                 }
                 this.layoutParams = layoutParams
                 scaleType = ImageView.ScaleType.CENTER_CROP
